@@ -5,11 +5,11 @@ import { DatabaseModel } from "./DatabaseModel.js";
 const database = new DatabaseModel().pool;
 
 class Aluno {
-    private id_aluno: number = 0;
+    private idAluno: number = 0;
     private ra: number;
     private nome: string;
     private sobrenome: string;
-    private data_nascimento: number;
+    private dataNascimento: number;
     private endereco: string;
     private email: string;
     private celular: number
@@ -19,105 +19,105 @@ class Aluno {
         _ra: number,
         _nome: string,
         _sobrenome: string,
-        _data_nascimento: number,
+        _dataNascimento: number,
         _endereco: string,
         _email: string,
         _celular: number
-    ){
+    ) {
         this.ra = _ra;
         this.nome = _nome;
         this.sobrenome = _sobrenome;
-        this.data_nascimento = _data_nascimento;
+        this.dataNascimento = _dataNascimento;
         this.endereco = _endereco;
         this.email = _endereco;
         this.celular = _celular
     }
 
-     public getId_aluno(): number {
-        return this.id_aluno;
+    public getIdAluno(): number {
+        return this.idAluno;
     }
 
-     public getRa(): number {
+    public getRa(): number {
         return this.ra;
     }
 
-     public getNome(): string {
+    public getNome(): string {
         return this.nome;
     }
 
-     public getSobrenome(): string {
+    public getSobrenome(): string {
         return this.sobrenome;
     }
 
-     public getData_nascimento(): number {
-        return this.data_nascimento;
+    public getDataNascimento(): number {
+        return this.dataNascimento;
     }
 
-     public getEndereco(): string {
+    public getEndereco(): string {
         return this.endereco;
     }
 
-     public getEmail(): string {
+    public getEmail(): string {
         return this.email;
     }
 
-     public getCelular(): number {
+    public getCelular(): number {
         return this.celular;
     }
 
-      public setId_aluno(_id_aluno: number): void {
-        this.id_aluno = _id_aluno;
+    public setIdAluno(_idAluno: number): void {
+        this.idAluno = _idAluno;
     }
 
-      public setRa(_ra: number): void {
+    public setRa(_ra: number): void {
         this.ra = _ra;
     }
 
-      public setNome(_nome: string): void {
+    public setNome(_nome: string): void {
         this.nome = _nome;
     }
 
-      public setSobrenome(_sobrenome: string): void {
+    public setSobrenome(_sobrenome: string): void {
         this.sobrenome = _sobrenome;
     }
 
-      public setData_nascimento(_data_nascimento: number): void {
-        this.data_nascimento = _data_nascimento;
+    public setDataNascimento(_dataNascimento: number): void {
+        this.dataNascimento = _dataNascimento;
     }
 
-      public setEndereco(_endereco: string): void {
+    public setEndereco(_endereco: string): void {
         this.endereco = _endereco;
     }
 
-      public setEmail(_email: string): void {
+    public setEmail(_email: string): void {
         this.email = _email;
     }
 
-      public setCelular(_celular: number): void {
+    public setCelular(_celular: number): void {
         this.celular = _celular;
     }
 
-     static async listarAluno(): Promise<Array<Aluno> | null> {
+    static async listarAluno(): Promise<Array<Aluno> | null> {
         try {
-          
+
             let listaDeAluno: Array<Aluno> = [];
 
-           
+
             const querySelectAluno = `SELECT * FROM Aluno;`;
             const respostaBD = await database.query(querySelectAluno);
 
             respostaBD.rows.forEach((AlunoBD: any) => {
-                const novoAluno: Aluno  = new Aluno (
+                const novoAluno: Aluno = new Aluno(
                     AlunoBD.ra,
                     AlunoBD.nome,
                     AlunoBD.sobrenome,
-                    AlunoBD.data_nascimento,
+                    AlunoBD.dataNascimento,
                     AlunoBD.endereco,
                     AlunoBD.email,
                     AlunoBD.celular
                 );
 
-                novoAluno.setId_aluno(AlunoBD.id_Aluno);
+                novoAluno.setIdAluno(AlunoBD.id_Aluno);
 
                 listaDeAluno.push(novoAluno);
             });
@@ -132,23 +132,23 @@ class Aluno {
 
     static async cadastrarAluno(Aluno: AlunoDTO): Promise<boolean> {
         try {
-            const queryInsertAluno = `INSERT INTO Aluno (nome, fabricante, principio_ativo, data_validade, preco)
+            const queryInsertAluno = `INSERT INTO Aluno (ra, nome, sobrenome, data_nascimento, endereco, email, celular)
                                 VALUES
-                                ($1, $2, $3, $4, $5)
+                                ($1, $2, $3, $4, $5, $6, $7)
                                 RETURNING id_Aluno;`;
 
             const respostaBD = await database.query(queryInsertAluno, [
                 Aluno.nome.toUpperCase(),
                 Aluno.ra,
-                Aluno.sobrenome, 
-                Aluno.data_nascimento,             
+                Aluno.sobrenome,
+                Aluno.dataNascimento,
                 Aluno.endereco,
                 Aluno.email,
-                Aluno.celular           
+                Aluno.celular
             ]);
 
             if (respostaBD.rows.length > 0) {
-                console.info(`Aluno  cadastrado com sucesso. ID: ${respostaBD.rows[0].id_Aluno}`);
+                console.info(`Aluno  cadastrado com sucesso. ID: ${respostaBD.rows[0].idAluno}`);
 
                 return true;
             }
@@ -161,29 +161,29 @@ class Aluno {
         }
     }
 
-    static async listaAlunosPorId(idAluno: number): Promise<Aluno  | null> {
-        try{
+    static async listaAlunosPorId(idAluno: number): Promise<Aluno | null> {
+        try {
             const querySelectAluno = `SELECT * FROM Aluno WHERE id_Aluno=$1;`;
 
             const respostaBD = await database.query(querySelectAluno, [idAluno]);
 
-            if(respostaBD.rowCount != 0) {
-                const aluno: Aluno  = new Aluno (
+            if (respostaBD.rowCount != 0) {
+                const aluno: Aluno = new Aluno(
                     respostaBD.rows[0].ra,
                     respostaBD.rows[0].nome,
                     respostaBD.rows[0].sobrenome,
-                    respostaBD.rows[0].data_nascimento,
+                    respostaBD.rows[0].dataNascimento,
                     respostaBD.rows[0].endereco,
                     respostaBD.rows[0].email,
                     respostaBD.rows[0].celular
                 );
-                aluno.setId_aluno(respostaBD.rows[0].id_Aluno);
+                aluno.setIdAluno(respostaBD.rows[0].id_Aluno);
 
                 return aluno;
             }
 
             return null;
-        }catch (error) {
+        } catch (error) {
             console.error(`Erro ao buscar Aluno no banco de dados. ${error}`);
             return null;
         }
@@ -191,4 +191,4 @@ class Aluno {
 
 }
 
-export default Aluno ;
+export default Aluno;
