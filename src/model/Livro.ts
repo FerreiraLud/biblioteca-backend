@@ -154,10 +154,10 @@ class Livro {
 
     static async cadastrarLivro(Livro: LivroDTO): Promise<boolean> {
         try {
-            const queryInsertLivro = `INSERT INTO Livro (titulo, autor, editora, anoPuplicacao, isbn, quantTotal, quantDisponivel, valorAquisicao, statusLivroLivro)
+            const queryInsertLivro = `INSERT INTO Livro (titulo, autor, editora, ano_puplicacao, isbn, quant_Total, quant_Disponivel, valor_Aquisicao, status_Livro_Emprestimo)
                                         VALUES
-                                        ($1, $2, $3, $4, $5)
-                                        RETURNING idLivro;`;
+                                        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                                        RETURNING id_Livro;`;
 
             const respostaBD = await database.query(queryInsertLivro, [
                 Livro.titulo,
@@ -187,7 +187,7 @@ class Livro {
 
     static async listaLivrosPorId(idLivro: number): Promise<Livro | null> {
         try {
-            const querySelectLivro = `SELECT * FROM Livro WHERE idLivro=$1;`;
+            const querySelectLivro = `SELECT * FROM Livro WHERE id_Livro=$1;`;
 
             const respostaBD = await database.query(querySelectLivro, [idLivro]);
 

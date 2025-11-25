@@ -107,10 +107,10 @@ class Emprestimo {
 
     static async cadastrarEmprestimo(Emprestimo: EmprestimoDTO): Promise<boolean> {
         try {
-            const queryInsertEmprestimo = `INSERT INTO Emprestimo (idAluno, idLivro, dataEmprestimo, dataDevolucao, statusEmprestimo)
+            const queryInsertEmprestimo = `INSERT INTO Emprestimo (id_Aluno, id_Livro, data_Emprestimo, data_Devolucao, status_Emprestimo)
                                     VALUES
                                     ($1, $2, $3, $4, $5)
-                                    RETURNING idEmprestimo;`;
+                                    RETURNING id_Emprestimo;`;
 
             const respostaBD = await database.query(queryInsertEmprestimo, [
                 Emprestimo.idAluno,
@@ -136,7 +136,7 @@ class Emprestimo {
 
     static async listaEmprestimosPorId(idEmprestimo: number): Promise<Emprestimo | null> {
         try {
-            const querySelectEmprestimo = `SELECT * FROM Emprestimo WHERE idEmprestimo=$1;`;
+            const querySelectEmprestimo = `SELECT * FROM Emprestimo WHERE id_Emprestimo=$1;`;
 
             const respostaBD = await database.query(querySelectEmprestimo, [idEmprestimo]);
 
